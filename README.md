@@ -8,7 +8,7 @@
 
 | 组件 | 版本 | 分发方式 |
 | --- | --- | --- |
-| 插件（引擎侧） | 1.5.0 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
+| 插件（引擎侧） | 1.5.2 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
 | Firefox 扩展 | 1.8.0 | 本仓库 Releases 的 `.xpi`（需签名后安装） |
 | Chromium 扩展 | 1.8.0 | 本仓库 Releases 的 `.zip`（解压加载）或 `.crx` |
 
@@ -32,10 +32,10 @@
 dsh plugin --profile web add dsh-go-browse-use
 ```
 
-离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.5.0.tgz`](plugin/dsh-go-browse-use-1.5.0.tgz)，再本地安装：
+离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.5.2.tgz`](plugin/dsh-go-browse-use-1.5.2.tgz)，再本地安装：
 
 ```bash
-dsh plugin --profile web add ./dsh-go-browse-use-1.5.0.tgz
+dsh plugin --profile web add ./dsh-go-browse-use-1.5.2.tgz
 ```
 
 安装后重启引擎（插件 `lib/` 改动必须重启才生效）。
