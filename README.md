@@ -32,6 +32,12 @@
 dsh plugin --profile web add dsh-go-browse-use
 ```
 
+离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.5.0.tgz`](plugin/dsh-go-browse-use-1.5.0.tgz)，再本地安装：
+
+```bash
+dsh plugin --profile web add ./dsh-go-browse-use-1.5.0.tgz
+```
+
 安装后重启引擎（插件 `lib/` 改动必须重启才生效）。
 
 ### 二、安装浏览器扩展
