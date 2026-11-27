@@ -8,9 +8,9 @@
 
 | 组件 | 版本 | 分发方式 |
 | --- | --- | --- |
-| 插件（引擎侧） | 1.8.0 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
-| Firefox 扩展 | 1.12.0 | 本仓库 Releases 的 `.xpi`（需签名后安装） |
-| Chromium 扩展 | 1.12.0 | 本仓库 Releases 的 `.zip`（解压加载）或 `.crx` |
+| 插件（引擎侧） | 1.10.0 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
+| Firefox 扩展 | 1.14.0 | 本仓库 Releases 的 `.xpi`（需签名后安装） |
+| Chromium 扩展 | 1.14.0 | 本仓库 Releases 的 `.zip`（解压加载）或 `.crx` |
 
 插件与扩展分开版本：插件负责起服务、注册 `browser` 工具和面板；扩展负责在浏览器里执行命令。
 
@@ -18,9 +18,9 @@
 
 到 [Releases](https://github.com/YOUNG-FELIX/dsh-go-browse-use/releases/latest) 下载：
 
-- `dsh-go-browse-use-1.12.0.xpi` —— Firefox
-- `dsh-go-browse-use-1.12.0-chromium.zip` —— Chrome / Edge / Vivaldi 解压加载
-- `dsh-go-browse-use-1.12.0.crx` —— Edge Canary / Dev 等允许从文件安装的 Chromium
+- `dsh-go-browse-use-1.14.0.xpi` —— Firefox
+- `dsh-go-browse-use-1.14.0-chromium.zip` —— Chrome / Edge / Vivaldi 解压加载
+- `dsh-go-browse-use-1.14.0.crx` —— Edge Canary / Dev 等允许从文件安装的 Chromium
 
 ## 安装
 
@@ -32,10 +32,10 @@
 dsh plugin --profile web add dsh-go-browse-use
 ```
 
-离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.8.0.tgz`](plugin/dsh-go-browse-use-1.8.0.tgz)，再本地安装：
+离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.10.0.tgz`](plugin/dsh-go-browse-use-1.10.0.tgz)，再本地安装：
 
 ```bash
-dsh plugin --profile web add ./dsh-go-browse-use-1.8.0.tgz
+dsh plugin --profile web add ./dsh-go-browse-use-1.10.0.tgz
 ```
 
 安装后重启引擎（插件 `lib/` 改动必须重启才生效）。
@@ -50,18 +50,18 @@ Firefox 正式版只允许安装**已签名**的扩展，目前还未上架 AMO�
 
 1. **自己签名（推荐，装完长期可用）**
    - 打开 https://addons.mozilla.org/developers/addon/submit/
-   - 选择「On your own site（自己分发）」，上传 `dsh-go-browse-use-1.12.0.xpi`
+   - 选择「On your own site（自己分发）」，上传 `dsh-go-browse-use-1.14.0.xpi`
    - 签名完成后下载签好的 `.xpi`，在 Firefox 里打开 `about:addons` → 齿轮 → 「从文件安装附加组件」，选择签好的 xpi
 2. **临时加载（只用于调试，重启浏览器失效）**
    - 打开 `about:debugging#/runtime/this-firefox`
-   - 「临时载入附加组件」→ 选择 `dsh-go-browse-use-1.12.0.xpi`
+   - 「临时载入附加组件」→ 选择 `dsh-go-browse-use-1.14.0.xpi`
 
 > 上架 AMO 审核通过后，可以直接在 addons.mozilla.org 搜索安装，届时本节会更新。
 
 #### Chromium 系（Chrome / Edge / Vivaldi）
 
-- **解压加载（通用）**：把 `dsh-go-browse-use-1.12.0-chromium.zip` 解压到固定目录，打开 `chrome://extensions`（Edge 是 `edge://extensions`），开启「开发者模式」，点「加载已解压的扩展程序」，选择解压出的目录。
-- **Edge Canary / Dev**：可直接把 `dsh-go-browse-use-1.12.0.crx` 拖进扩展页面安装（浏览器需允许从文件安装 CRX）。
+- **解压加载（通用）**：把 `dsh-go-browse-use-1.14.0-chromium.zip` 解压到固定目录，打开 `chrome://extensions`（Edge 是 `edge://extensions`），开启「开发者模式」，点「加载已解压的扩展程序」，选择解压出的目录。
+- **Edge Canary / Dev**：可直接把 `dsh-go-browse-use-1.14.0.crx` 拖进扩展页面安装（浏览器需允许从文件安装 CRX）。
 - Chrome 正式版不支持直接拖入 CRX，请用上面的解压加载方式。
 
 > 上架 Chrome Web Store / Edge Add-ons 审核通过后，可以直接在商店搜索安装，届时本节会更新。
