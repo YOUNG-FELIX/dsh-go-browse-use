@@ -8,7 +8,7 @@
 
 | 组件 | 版本 | 分发方式 |
 | --- | --- | --- |
-| 插件（引擎侧） | 1.10.0 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
+| 插件（引擎侧） | 1.11.1 | npm [`dsh-go-browse-use`](https://www.npmjs.com/package/dsh-go-browse-use)、dsh 市场 |
 | Firefox 扩展 | 1.14.0 | 本仓库 Releases 的 `.xpi`（需签名后安装） |
 | Chromium 扩展 | 1.14.0 | 本仓库 Releases 的 `.zip`（解压加载）或 `.crx` |
 
@@ -18,9 +18,15 @@
 
 到 [Releases](https://github.com/YOUNG-FELIX/dsh-go-browse-use/releases/latest) 下载：
 
-- `dsh-go-browse-use-1.14.0.xpi` —— Firefox
+- `dsh-go-browse-use-1.14.0.xpi` —— Firefox（公开上架用，id `dshgo-browse-use@dsh-go.local`）
+- `dsh-go-browse-use-1.14.0-selfhosted.xpi` —— Firefox（自己托管用，id `browser-bridge@dsh-go.local`）
 - `dsh-go-browse-use-1.14.0-chromium.zip` —— Chrome / Edge / Vivaldi 解压加载
 - `dsh-go-browse-use-1.14.0.crx` —— Edge Canary / Dev 等允许从文件安装的 Chromium
+
+> 两个 Firefox 包内容完全一样，只差 manifest 里的扩展 id。AMO 按 id 判重，
+> 一个 id 只能对应一个条目，所以「公开上架」和「自己托管」必须分开占两个 id。
+> 已经用旧 id（`browser-bridge@dsh-go.local`）装过的用户，走 selfhosted 那个包
+> 升级后仍是同一个扩展，**不需要重新配对**。
 
 ## 安装
 
@@ -32,10 +38,10 @@
 dsh plugin --profile web add dsh-go-browse-use
 ```
 
-离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.10.0.tgz`](plugin/dsh-go-browse-use-1.10.0.tgz)，再本地安装：
+离线安装：直接下载本仓库的 [`plugin/dsh-go-browse-use-1.11.1.tgz`](plugin/dsh-go-browse-use-1.11.1.tgz)，再本地安装：
 
 ```bash
-dsh plugin --profile web add ./dsh-go-browse-use-1.10.0.tgz
+dsh plugin --profile web add ./dsh-go-browse-use-1.11.1.tgz
 ```
 
 安装后重启引擎（插件 `lib/` 改动必须重启才生效）。
@@ -83,6 +89,8 @@ Firefox 正式版只允许安装**已签名**的扩展，目前还未上架 AMO�
 
 ## 常用动作
 
+默认宽松模式下这些命令都不会弹审批，直接执行：
+
 ```js
 browser({ action: 'tabs' })
 browser({ action: 'text', tab: '3' })
@@ -97,9 +105,38 @@ browser({ action: 'shot' })
 ## 安全模型
 
 - **扩展层**：cookie 只出门元数据，真值留在浏览器侧
-- **桥接层**：命令级授权，敏感命令进不了队列；cookie 落盘 `0600`；正文与诊断日志转发时脱敏
-- **插件层**：走 App 原生审批弹窗，用户不点「允许」工具不会执行
+- **桥接层**：cookie 落盘 `0600`；正文与诊断日志转发时脱敏
+- **插件层**：默认宽松模式，浏览器操控不逐次弹审批
+
+默认是**宽松模式**：读页面、点按钮、填表单、导航、截图都直接执行，
+因为结果都过了脱敏（扩展侧掩掉身份证/银行卡/手机号/邮箱/口令/JWT/私钥，
+桥接侧再递归删一遍 `value`/`cookie` 这类字段），浏览器操控本身没有破坏性。
+
+只有一件事每次都要批：**在页面里执行任意代码**（`page.eval`）——
+那是唯一能绕过脱敏的通道，页面里一句 `document.cookie` 就能把凭据原值塞进上下文。
+
+想要逐站点审批就切回严格模式：插件面板上点一下，或写
+
+```bash
+echo '{"relax": false}' > ~/.dsh/dsh-go/browser-bridge/mode.json
+```
+
+改完不用重启，下一次调用就生效。
+
 - `cookies.get` 只返回 `{name, length, fp, domain, path, secure, httpOnly, sameSite, session, expirationDate}`，不含 `value`
+- `cookies.jar` 的真值写进 `jar.json`（`0600`），回给模型的只有 `{host, count, names, bytes}`
+
+## 面板
+
+面板最下面有一块**固定高度**的操作日志，显示最近的操作记录：
+
+```
+20:45:09 ✓ page.text
+20:45:12 … nav.goto
+20:45:30 ✗ page.click · 没有扩展连上来过：浏览器没开，或扩展没配对
+```
+
+`✓` 成功 / `✗` 失败 / `…` 已下发但结果还没回来。最新在最上面。
 
 ## License
 
